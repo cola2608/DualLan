@@ -23,6 +23,8 @@ class PanViewController: UIViewController {
     var rightLanView = UIView()
     var middleLanView = UIView()
     var indexOfMod = -1
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let tap = UITapGestureRecognizer(target: self, action: #selector(PanViewController.tap(recognizer:)))
@@ -37,32 +39,23 @@ class PanViewController: UIViewController {
         self.middleLanView = Draw2(frame: CGRect(
             origin: CGPoint(x: self.view.frame.width  / 3, y: 0),
             size: CGSize(width: self.view.frame.width / 3, height: self.view.frame.height)))
-        // Add the view to the view hierarchy so that it shows up on screen
         self.view.addSubview(self.leftLanView)
         self.view.addSubview(self.middleLanView)
         self.view.addSubview(self.rightLanView)
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        self.changeView(leftLocation: self.view.frame.width / 4, rightLocation: self.view.frame.width / 2, timeInterval: 1)
     }
     
-    func changeView(leftLocation: CGFloat,middleLocation: CGFloat, rightLocation: CGFloat, timeInterval: TimeInterval) {
-        UIView.animate(withDuration: timeInterval, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
-            self.rightLanView.frame = CGRect(x: middleLocation, y: 0, width: rightLocation - middleLocation, height: self.view.frame.height)
-        }, completion: nil)
-        UIView.animate(withDuration: timeInterval, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
-            self.middleLanView.frame = CGRect(x: leftLocation, y: 0, width: middleLocation - leftLocation, height: self.view.frame.height)
-        }, completion: nil)
-        UIView.animate(withDuration: timeInterval, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
-            self.leftLanView.frame = CGRect(x: 0, y: 0, width: leftLocation, height: self.view.frame.height)
-        }, completion: nil)
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
+    
+    //MARK: - Initiail UI
     
     func initModView(view : UIView, number: Int) {
-        // 一個可供移動的 UIView
         let mod = self.modArray.object(at: number) as! modEntity
         let modView = UIView(frame: CGRect(
             x: mod.x - 30, y: mod.y - 40,
@@ -82,27 +75,116 @@ class PanViewController: UIViewController {
         modView.addSubview(modName)
         modView.addSubview(modType)
         modView.addSubview(imgaeView)
-        // 拖曳手勢
         let pan = UIPanGestureRecognizer(
             target:self,
             action:#selector(PanViewController.pan(recognizer:)))
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(PanViewController.longPress(recognizer:)))
         
-        // 最少可以用幾指拖曳
         pan.minimumNumberOfTouches = 1
         
-        // 最多可以用幾指拖曳
         pan.maximumNumberOfTouches = 1
         
-        // 為這個可移動的 UIView 加上監聽手勢
         modView.addGestureRecognizer(pan)
         modView.addGestureRecognizer(longPress)
         self.modViewArray.add(modView)
     }
-
+    
+    func initLocation(index : Int) {
+        let height = self.view.frame.width > self.view.frame.height ? self.view.frame.height : self.view.frame.width
+        switch index {
+        case 0:
+            (self.modArray.object(at: index) as! modEntity).x = 60
+            (self.modArray.object(at: index) as! modEntity).y = height / 2
+            (self.modArray.object(at: index) as! modEntity).lan = 0
+            (self.modArray.object(at: index) as! modEntity).index = 0
+        case 1:
+            (self.modArray.object(at: index) as! modEntity).x = 150
+            (self.modArray.object(at: index) as! modEntity).y = height / 2
+            (self.modArray.object(at: index) as! modEntity).lan = 0
+            (self.modArray.object(at: index) as! modEntity).index = 1
+        case 2:
+            (self.modArray.object(at: index) as! modEntity).x = 240
+            (self.modArray.object(at: index) as! modEntity).y = height * 0.2
+            (self.modArray.object(at: index) as! modEntity).lan = 1
+            (self.modArray.object(at: index) as! modEntity).index = 0
+            
+        case 3:
+            (self.modArray.object(at: index) as! modEntity).x = 330
+            (self.modArray.object(at: index) as! modEntity).y = height * 0.2
+            (self.modArray.object(at: index) as! modEntity).lan = 1
+            (self.modArray.object(at: index) as! modEntity).index = 1
+            
+        case 4:
+            (self.modArray.object(at: index) as! modEntity).x = 420
+            (self.modArray.object(at: index) as! modEntity).y = height * 0.2
+            (self.modArray.object(at: index) as! modEntity).lan = 1
+            (self.modArray.object(at: index) as! modEntity).index = 2
+        case 5:
+            (self.modArray.object(at: index) as! modEntity).x = 240
+            (self.modArray.object(at: index) as! modEntity).y = height * 0.8
+            (self.modArray.object(at: index) as! modEntity).lan = 2
+            (self.modArray.object(at: index) as! modEntity).index = 0
+        case 6:
+            (self.modArray.object(at: index) as! modEntity).x = 330
+            (self.modArray.object(at: index) as! modEntity).y = height * 0.8
+            (self.modArray.object(at: index) as! modEntity).lan = 2
+            (self.modArray.object(at: index) as! modEntity).index = 1
+        case 7:
+            (self.modArray.object(at: index) as! modEntity).x = 510
+            (self.modArray.object(at: index) as! modEntity).y = height / 2
+            (self.modArray.object(at: index) as! modEntity).lan = 3
+            (self.modArray.object(at: index) as! modEntity).index = 0
+        case 8:
+            (self.modArray.object(at: index) as! modEntity).x = 600
+            (self.modArray.object(at: index) as! modEntity).y = height / 2
+            (self.modArray.object(at: index) as! modEntity).lan = 3
+            (self.modArray.object(at: index) as! modEntity).index = 1
+        default:
+            
+            return
+        }
+    }
+    
+    func parseData (xml : String) {
+        let url = URL.init(string: xml)!
+        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let fileURL = documentsURL.appendingPathComponent("data.json")
+            
+            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        Alamofire.download(url, to: destination).responseJSON { (response) in
+            if let jsonData = response.result.value {
+                let json = JSON(jsonData)
+                for i in 0 ..< json["sigPath"]["blocks"].count {
+                    if let name = json["sigPath"]["blocks"][i]["name"].string {
+                        let mod = modEntity.init()
+                        mod.name = name
+                        mod.imageURL =  json["sigPath"]["blocks"][i]["img"].string!
+                        mod.type =  json["sigPath"]["blocks"][i]["type"].int!
+                        self.modArray.add(mod)
+                        self.initLocation(index: i)
+                        self.initModView(view: self.view, number: i)
+                    }else {
+                        print(json)
+                    }
+                }
+                self.caculateLanView(timeInterval: 0)
+            }
+        }
+    }
+    
+    func addDeleteButton(view: UIView) {
+        self.deleteBtn = UIButton(frame: CGRect(x: 50, y: 0, width: 10, height: 10))
+        self.deleteBtn.setTitle("x", for: UIControlState.normal)
+        self.deleteBtn.addTarget(self, action: #selector(PanViewController.deleteView), for: UIControlEvents.touchUpInside)
+        view.addSubview(self.deleteBtn)
+    }
+    
+    //MARK: - GestureRecognizer
+    
     func pan(recognizer:UIPanGestureRecognizer) {
-        // 設置 UIView 新的位置
         if self.indexOfMod == -1 {
             return
         }
@@ -140,10 +222,15 @@ class PanViewController: UIViewController {
                 }
             }
             if point.x > xOfLastIndex && point.x < xOfLastIndex + 90 * length && point.y < yOfLastIndex + 20 && point.y > yOfLastIndex - 20 {
-                for i in 0 ..< self.modArray.count {
-                    let mod = self.modArray.object(at: i) as! modEntity
-                    if mod.lan == modOfSource.lan && mod.index > modOfSource.index {
-                        mod.index = mod.index - 1
+                if caculateLanCount(index: 1) == 0 {
+                    xOfLastIndex = CGFloat(caculateLanCount(index: 0) * 90 + 30)
+                    yOfLastIndex = self.view.frame.height * 0.2
+                }else {
+                    for i in 0 ..< self.modArray.count {
+                        let mod = self.modArray.object(at: i) as! modEntity
+                        if mod.lan == modOfSource.lan && mod.index > modOfSource.index {
+                            mod.index = mod.index - 1
+                        }
                     }
                 }
                 UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
@@ -155,12 +242,17 @@ class PanViewController: UIViewController {
             }
         } else if caculateLanCount(index: 1) > caculateLanCount(index: 2) {
             let length: CGFloat = CGFloat(caculateLanCount(index: 1) - caculateLanCount(index: 2))
-            for i in 0 ..< self.modArray.count {
-                let mod = self.modArray.object(at: i) as! modEntity
-                if mod.lan == 2 && mod.index == caculateLanCount(index: 2) - 1 {
-                    xOfLastIndex = mod.x + CGFloat(30)
-                    yOfLastIndex = mod.y
-                    break
+            if caculateLanCount(index: 2) == 0 {
+                xOfLastIndex = CGFloat(caculateLanCount(index: 0) * 90 + 30)
+                yOfLastIndex = self.view.frame.height * 0.8
+            }else {
+                for i in 0 ..< self.modArray.count {
+                    let mod = self.modArray.object(at: i) as! modEntity
+                    if mod.lan == 2 && mod.index == caculateLanCount(index: 2) - 1 {
+                        xOfLastIndex = mod.x + CGFloat(30)
+                        yOfLastIndex = mod.y
+                        break
+                    }
                 }
             }
             if point.x > xOfLastIndex && point.x < xOfLastIndex + 90 * length && point.y < yOfLastIndex + 20 && point.y > yOfLastIndex - 20 {
@@ -223,11 +315,18 @@ class PanViewController: UIViewController {
         }
     }
     
-    func addDeleteButton(view: UIView) {
-        self.deleteBtn = UIButton(frame: CGRect(x: 50, y: 0, width: 10, height: 10))
-        self.deleteBtn.setTitle("x", for: UIControlState.normal)
-        self.deleteBtn.addTarget(self, action: #selector(PanViewController.deleteView), for: UIControlEvents.touchUpInside)
-        view.addSubview(self.deleteBtn)
+    //MARK: - Caculate Mod
+
+    func changeView(leftLocation: CGFloat,middleLocation: CGFloat, rightLocation: CGFloat, timeInterval: TimeInterval) {
+        UIView.animate(withDuration: timeInterval, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+            self.rightLanView.frame = CGRect(x: middleLocation, y: 0, width: rightLocation - middleLocation, height: self.view.frame.height)
+        }, completion: nil)
+        UIView.animate(withDuration: timeInterval, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+            self.middleLanView.frame = CGRect(x: leftLocation, y: 0, width: middleLocation - leftLocation, height: self.view.frame.height)
+        }, completion: nil)
+        UIView.animate(withDuration: timeInterval, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+            self.leftLanView.frame = CGRect(x: 0, y: 0, width: leftLocation, height: self.view.frame.height)
+        }, completion: nil)
     }
     
     func deleteView() {
@@ -339,96 +438,6 @@ class PanViewController: UIViewController {
             let mod = self.modArray.object(at: i) as! modEntity
             view.center.x = mod.x
             view.center.y = mod.y
-        }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func initLocation(index : Int) {
-        let height = self.view.frame.width > self.view.frame.height ? self.view.frame.height : self.view.frame.width
-        switch index {
-        case 0:
-            (self.modArray.object(at: index) as! modEntity).x = 60
-            (self.modArray.object(at: index) as! modEntity).y = height / 2
-            (self.modArray.object(at: index) as! modEntity).lan = 0
-            (self.modArray.object(at: index) as! modEntity).index = 0
-        case 1:
-            (self.modArray.object(at: index) as! modEntity).x = 150
-            (self.modArray.object(at: index) as! modEntity).y = height / 2
-            (self.modArray.object(at: index) as! modEntity).lan = 0
-            (self.modArray.object(at: index) as! modEntity).index = 1
-        case 2:
-            (self.modArray.object(at: index) as! modEntity).x = 240
-            (self.modArray.object(at: index) as! modEntity).y = height * 0.2
-            (self.modArray.object(at: index) as! modEntity).lan = 1
-            (self.modArray.object(at: index) as! modEntity).index = 0
-            
-        case 3:
-            (self.modArray.object(at: index) as! modEntity).x = 330
-            (self.modArray.object(at: index) as! modEntity).y = height * 0.2
-            (self.modArray.object(at: index) as! modEntity).lan = 1
-            (self.modArray.object(at: index) as! modEntity).index = 1
-            
-        case 4:
-            (self.modArray.object(at: index) as! modEntity).x = 420
-            (self.modArray.object(at: index) as! modEntity).y = height * 0.2
-            (self.modArray.object(at: index) as! modEntity).lan = 1
-            (self.modArray.object(at: index) as! modEntity).index = 2
-        case 5:
-            (self.modArray.object(at: index) as! modEntity).x = 240
-            (self.modArray.object(at: index) as! modEntity).y = height * 0.8
-            (self.modArray.object(at: index) as! modEntity).lan = 2
-            (self.modArray.object(at: index) as! modEntity).index = 0
-        case 6:
-            (self.modArray.object(at: index) as! modEntity).x = 330
-            (self.modArray.object(at: index) as! modEntity).y = height * 0.8
-            (self.modArray.object(at: index) as! modEntity).lan = 2
-            (self.modArray.object(at: index) as! modEntity).index = 1
-        case 7:
-            (self.modArray.object(at: index) as! modEntity).x = 510
-            (self.modArray.object(at: index) as! modEntity).y = height / 2
-            (self.modArray.object(at: index) as! modEntity).lan = 3
-            (self.modArray.object(at: index) as! modEntity).index = 0
-        case 8:
-            (self.modArray.object(at: index) as! modEntity).x = 600
-            (self.modArray.object(at: index) as! modEntity).y = height / 2
-            (self.modArray.object(at: index) as! modEntity).lan = 3
-            (self.modArray.object(at: index) as! modEntity).index = 1
-        default:
-            
-            return
-        }
-    }
-    
-    func parseData (xml : String) {
-        let url = URL.init(string: xml)!
-        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let fileURL = documentsURL.appendingPathComponent("data.json")
-            
-            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
-        }
-        Alamofire.download(url, to: destination).responseJSON { (response) in
-            if let jsonData = response.result.value {
-                let json = JSON(jsonData)
-                for i in 0 ..< json["sigPath"]["blocks"].count {
-                    if let name = json["sigPath"]["blocks"][i]["name"].string {
-                        let mod = modEntity.init()
-                        mod.name = name
-                        mod.imageURL =  json["sigPath"]["blocks"][i]["img"].string!
-                        mod.type =  json["sigPath"]["blocks"][i]["type"].int!
-                        self.modArray.add(mod)
-                        self.initLocation(index: i)
-                        self.initModView(view: self.view, number: i)
-                    }else {
-                        print(json)
-                    }
-                }
-                self.caculateLanView(timeInterval: 0)
-            }
         }
     }
 
